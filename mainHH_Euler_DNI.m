@@ -1,4 +1,4 @@
-function [t,V]=mainHH_Euler_DNI(gbarNa)
+function [t,V,ion]=mainHH_Euler_DNI(Iap,gbarNa)
 %==============================
 %% HODKING-HUXLEY MODEL NEURAL CELL MODEL
 %============================== 
@@ -9,10 +9,13 @@ function [t,V]=mainHH_Euler_DNI(gbarNa)
 Cm=0.01; % Membrane Capcitance mF/cm^2
 dt=0.05; % Time Step ms
 t=0:dt:100; %Time Array ms
+if nargin<1
 Iap=0.1; %External Current Applied
+end
 ENa=55.17; % mv Na reversal potential
 EK=-72.14; % mv K reversal potential
-El=-49.42; % mv Leakage reversal potentialif nargin<1
+El=-49.42; % mv Leakage reversal potential
+if nargin<2
 gbarNa=1.2; % mS/cm^2 Na conductance
 end
 gbarK=0.36; % mS/cm^2 K conductance
@@ -95,36 +98,39 @@ for i=1:length(t)-1
     bn=0.125*exp(-(V(i)+60)/80);
 
     
-    
+
 % Ya disponemos de todo lo necesario para pasar al siguiente instante
 % del bucle
 
 end
- 
+ion.INa=INa;
+ion.IK=IK;
+ion.Il=Il;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PLOT ACTION POTENTIAL
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%close all
-figure(1)
-plot(t,V,'LineWidth',2),hold on
-legend('Action Potential');
-xlabel('Time (ms)','FontWeight','bold') 
-ylabel('Voltage (mV)','FontWeight','bold') 
-title('Voltage Change for Hodgkin-Huxley Model','FontWeight','bold') 
-set(gca,'FontSize',12)
-set(gca,'FontWeight','bold')  
- 
+% %close all
+% figure(1)
+% plot(t,V,'LineWidth',2),hold on
+% legend('Action Potential');
+% xlabel('Time (ms)','FontWeight','bold') 
+% ylabel('Voltage (mV)','FontWeight','bold') 
+% title('Voltage Change for Hodgkin-Huxley Model','FontWeight','bold') 
+% set(gca,'FontSize',12)
+% set(gca,'FontWeight','bold')  
+%  
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % PLOT ION CHANNEL CURRENTS
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% figure(2)
+% plot(t(1:length(INa)),INa,'g',t(1:length(INa)),IK,'r',t(1:length(INa)),Il,'k','LineWidth',2),hold on
+% ylabel('Ion channel currents','FontWeight','bold') 
+% xlabel('Time (ms)','FontWeight','bold') 
+% %axis([0 5 0 1])
+% legend('INa','IK','Ir');
+% set(gca,'FontSize',12)
+% set(gca,'FontWeight','bold')
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% PLOT ION CHANNEL CURRENTS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-figure(2)
-plot(t(1:length(INa)),INa,'g',t(1:length(INa)),IK,'r',t(1:length(INa)),Il,'k','LineWidth',2),hold on
-ylabel('Ion channel currents','FontWeight','bold') 
-xlabel('Time (ms)','FontWeight','bold') 
-%axis([0 5 0 1])
-legend('INa','IK','Ir');
-set(gca,'FontSize',12)
-set(gca,'FontWeight','bold')  
 end
 
